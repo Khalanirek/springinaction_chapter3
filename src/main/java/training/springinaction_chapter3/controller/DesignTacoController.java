@@ -5,13 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import training.springinaction_chapter3.tacos.Ingredient;
+import training.springinaction_chapter3.tacos.Order;
 import training.springinaction_chapter3.tacos.Taco;
 import training.springinaction_chapter3.tacos.data.IngredientRepository;
+import training.springinaction_chapter3.tacos.data.TacoRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -25,12 +24,18 @@ import java.util.stream.Collectors;
 @SessionAttributes("order")
 public class DesignTacoController {
     private final IngredientRepository ingredientRepository;
+    private final TacoRepository tacoRepository;
 
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepository){
+    public DesignTacoController(IngredientRepository ingredientRepository, TacoRepository tacoRepository) {
         this.ingredientRepository = ingredientRepository;
+        this.tacoRepository = tacoRepository;
     }
 
+    @ModelAttribute(name = "order")
+    public Order order(){
+        return new Order();
+    }
     @GetMapping()
     public String showDesignForm(Model model) {
         /*List<Ingredient> ingredients = Arrays.asList(
@@ -57,10 +62,13 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processTaco(@Valid Taco taco, Errors errors) {
+    public String processTaco(@Valid Taco taco, Errors errors, @ModelAttribute Order order) {
         if (errors.hasErrors()){
             return "design";
         }
+        Taco savedTaco = tacoRepository.save(taco);
+        order.addTaco(savedTaco);
+
         log.info("Processing taco project: " + taco);
         return "redirect:/orders/current";
     }
