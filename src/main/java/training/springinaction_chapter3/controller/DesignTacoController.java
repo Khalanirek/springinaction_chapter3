@@ -15,6 +15,7 @@ import training.springinaction_chapter3.tacos.data.TacoRepository;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,9 +37,10 @@ public class DesignTacoController {
     public Order order(){
         return new Order();
     }
+
     @GetMapping()
     public String showDesignForm(Model model) {
-        /*List<Ingredient> ingredients = Arrays.asList(
+        List<Ingredient> ingredients = Arrays.asList(
                 new Ingredient("FLTO", "pszenna", Ingredient.Type.WRAP),
                 new Ingredient("COTO", "kukurydziana", Ingredient.Type.WRAP),
                 new Ingredient("GRBF", "mielona wołowina", Ingredient.Type.PROTEIN),
@@ -49,9 +51,7 @@ public class DesignTacoController {
                 new Ingredient("JACK", "Monterey Jack", Ingredient.Type.CHEESE),
                 new Ingredient("SLSA", "pikantny sos pomidorowy", Ingredient.Type.SAUCE),
                 new Ingredient("SRCR", "śmietana", Ingredient.Type.SAUCE)
-        );*/
-        List<Ingredient> ingredients = new ArrayList<>();
-        ingredientRepository.findAll().forEach(ingredient -> ingredients.add(ingredient));
+        );
 
         Ingredient.Type[] types = Ingredient.Type.values();
         for (Ingredient.Type type : types) {

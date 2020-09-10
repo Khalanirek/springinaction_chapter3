@@ -1,7 +1,10 @@
 package training.springinaction_chapter3.tacos.data;
 
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 import training.springinaction_chapter3.tacos.Taco;
 
-public interface TacoRepository {
-    Taco save(Taco taco);
+@Repository
+public interface TacoRepository extends CrudRepository<Taco, Long> {
+
 }
